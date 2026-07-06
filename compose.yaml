@@ -1,0 +1,25 @@
+services:
+  web:
+    build: .
+    container_name: redis-demo-web
+    ports:
+      - "${WEB_PORT}:5000"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - APP_NAME=${APP_NAME}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-demo-redis
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis-data:

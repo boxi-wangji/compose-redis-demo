@@ -9,6 +9,10 @@ app_name = os.environ.get("APP_NAME", "Compose Redis App v2")
 
 redis_client = Redis(host=redis_host, port=6379, decode_responses=True)
 
+@app.route("/health")
+def health():
+    return "ok\n"
+
 @app.route("/")
 def home():
     count = redis_client.incr("visit_count")

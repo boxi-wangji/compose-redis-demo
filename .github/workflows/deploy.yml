@@ -1,0 +1,19 @@
+name: Deploy to VM
+
+on:
+  workflow_run:
+    workflows: ["Publish Docker Image"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: [self-hosted, Linux, X64]
+
+    steps:
+      - name: Run deploy script
+        run: |
+          cd /home/devops/prod-demo
+          ./deploy.sh
